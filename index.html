@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#176ed4">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; img-src 'self'; media-src 'none'; font-src 'none'; frame-src 'none'; object-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="description" content="発音記号やピンイン、かなで音をつくって聞ける、子ども向けの発音あそび。">
+  <title>いっちゃんの おとの じっけんしつ</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="mast"><span class="logo" aria-hidden="true">♫</span><div><h1>おとの じっけんしつ</h1><p>きごうを おして、こえを つくろう！</p></div></header>
+    <section class="card work" aria-label="発音をつくる">
+      <div class="mode-switch" role="group" aria-label="読み方のモード"><button id="singleMode" class="mode active" type="button" aria-pressed="true">ひとつの ことば</button><button id="mixMode" class="mode" type="button" aria-pressed="false">ことばを まぜる</button></div>
+      <div class="editor"><div id="single"><label for="language">ことばを えらぶ</label><select id="language"></select></div><p id="mixHint" hidden>いろいろな キーを、すきな じゅんに おしてね。</p><p id="inputLabel">ここに きごうが ならぶよ</p><div id="symbols" class="symbol-display" role="region" aria-labelledby="inputLabel" aria-live="polite"></div><div id="examples" class="examples"></div></div>
+      <div class="keyboard"><div class="keyboard-heading"><strong id="keyboardTitle">はつおん きごう</strong><span>タップで いれられるよ</span></div><div id="keyGroups"></div><div class="keyboard-actions"><button id="spaceKey" type="button">スペース</button><button id="backspaceKey" type="button">⌫ ひとつ けす</button><button id="clearKey" type="button">ぜんぶ けす</button></div></div>
+      <div class="controls"><div class="control"><label for="pitch">こえの たかさ <output id="pitchValue">ふつう</output></label><input id="pitch" type="range" min="0.7" max="1.7" step="0.1" value="1"></div><div class="control"><label for="rate">よむ はやさ <output id="rateValue">ふつう</output></label><input id="rate" type="range" min="0.65" max="1.35" step="0.05" value="1"></div></div>
+      <div class="playrow"><button id="play" class="play" type="button">▶ こえを きく</button><button id="stop" class="stop" type="button" disabled>■ とめる</button></div>
+      <p id="status" class="status" role="status" aria-live="polite">すきな きごうを おしてみよう！</p>
+    </section>
+    <section class="card history" aria-labelledby="historyTitle"><div class="section-heading"><h2 id="historyTitle">もういちど きく</h2><button id="clearHistory" class="text-button" type="button">きろくを けす</button></div><div id="historyList" class="history-list"></div></section>
+    <details class="about"><summary>インストール</summary><button id="installApp" type="button" hidden>ホームがめんに いれる</button><p id="installHelp">Android：Chrome の「︙」→「ホーム画面に追加」→「インストール」。iPhone：Safari の共有 →「ホーム画面に追加」。GitHub Pages の公開URLから開いてください。</p><p id="offlineStatus" role="status"></p></details>
+    <details class="about"><summary>おとなのかたへ：読み方と安全性</summary><p>IPA（国際音声記号）は多くの言語の音を表す共通の記号です。ピンインは中国語の発音表記、かなは日本語の表記です。このアプリは、IPAを選択言語の文字におおまかに変えてから読み上げます。正しい発音や声調の再現は保証できません。</p><p>初期設定では、ブラウザが「端末内で処理する」と申告した音声だけを自動選択します。該当する声がなければ再生しません。アプリの読み込み・更新時は公開元と通信します。入力をサーバーに送る処理はありません。GitHub Pagesではアクセス時のIPアドレスが記録されます。履歴はこのブラウザ内にだけ保存します。ブラウザや端末の内部動作までは、このアプリだけでは検証できません。</p><label class="voice-option"><input id="allowOtherVoices" type="checkbox"> 端末内の声がないとき、ほかの声も使う</label><p class="warning">これをオンにすると、端末や音声サービスによっては入力した文字が外部に送られる可能性があります。設定は保存されません。</p></details>
+  </main>
+  <script src="./app.js" defer></script>
+  <script src="./pwa.js" defer></script>
+</body>
+</html>
