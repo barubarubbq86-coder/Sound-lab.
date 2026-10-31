@@ -1,6 +1,6 @@
 'use strict';
 const PREFIX='itchan-sound-lab:'+self.registration.scope+':';
-const CACHE=PREFIX+'v4';
+const CACHE=PREFIX+'v5';
 const ASSETS=['./','./index.html','./app.js','./style.css','./pwa.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 const URLS=new Set(ASSETS.map(path=>new URL(path,self.registration.scope).href));
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
