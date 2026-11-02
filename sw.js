@@ -1,12 +1,5 @@
-'use strict';
-const PREFIX='itchan-sound-lab:'+self.registration.scope+':';
-const CACHE=PREFIX+'v5';
-const ASSETS=['./','./index.html','./app.js','./style.css','./pwa.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
-const URLS=new Set(ASSETS.map(path=>new URL(path,self.registration.scope).href));
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
-// A waiting update takes over when the old app's windows have closed.
-self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith(PREFIX)&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',event=>{
-  if(event.request.method!=='GET'||!URLS.has(event.request.url))return;
-  event.respondWith(caches.open(CACHE).then(async cache=>(await cache.match(event.request))||fetch(event.request)));
-});
+const CACHE='kotoba-phase08';const ASSETS=['./','./index.html','./style.css','./app.js','./config.js','./manifest.webmanifest','./icon.svg','./speech.js','./sound-ui.js','./lab/index.html','./lab/app.js','./lab/style.css','./lab/icons/icon-192.png','./lab/icons/icon-512.png','./lab/manifest.webmanifest'];
+self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('kotoba-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==self.location.origin||!ASSETS.some(a=>new URL(a,self.registration.scope).href===u.href))return;
+e.respondWith(fetch(e.request,{cache:'no-store'}).then(async r=>{if(r.ok){const c=await caches.open(CACHE);await c.put(e.request,r.clone())}return r}).catch(()=>caches.match(e.request))) });

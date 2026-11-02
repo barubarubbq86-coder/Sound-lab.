@@ -22,8 +22,8 @@
   const options = () => Object.entries(LANGS).map(([key,v]) => `<option value="${key}">${v.name}</option>`).join('');
   const state = { mixed:false, single:[], mix:[], speaking:0, history:readHistory(), koRefresh:null, koDraft:{single:{initial:null,vowel:null,final:0,index:null},mix:{initial:null,vowel:null,final:0,index:null}} };
   $('language').innerHTML=options(); $('language').value='en';
-  function readHistory(){try{const v=JSON.parse(localStorage.getItem('itchan-sounds-v1'));return Array.isArray(v)?v.filter(r=>Array.isArray(r.items)&&r.items.every(i=>LANGS[i.lang]&&typeof i.text==='string')).slice(0,60):[];}catch{return [];}}
-  function saveHistory(){try{localStorage.setItem('itchan-sounds-v1',JSON.stringify(state.history));}catch{setStatus('きろくを ほぞんできなかったよ。');}}
+  function readHistory(){return [];}
+  function saveHistory(){}
   function setStatus(value){$('status').textContent=value;}
   function tokens(){return state.mixed?state.mix:state.single;}
   function renderInput(){ $('symbols').textContent=tokens().map(t=>t.text).join(''); }
@@ -104,11 +104,11 @@
     return result.replaceAll(/\s+/g,' ').trim();
   }
   const PINYIN_PHRASES = {'nǐ hǎo':'你好','xiè xie':'谢谢','xiè xiè':'谢谢','zhōng guó':'中国','mā mā':'妈妈','wǒ ài nǐ':'我爱你','zài jiàn':'再见','bà ba':'爸爸','péng you':'朋友','zǎo shang hǎo':'早上好'};
-  function toSpeech({lang,text}) {if(lang==='zh')return PINYIN_PHRASES[text.toLowerCase().replaceAll(/\s+/g,' ')] || text;if(lang==='ja'||lang==='ko')return text;return ipaToSpelling(text,lang);}
+  function toSpeech({lang,text,raw}) {if(raw)return text;if(lang==='zh')return PINYIN_PHRASES[text.toLowerCase().replaceAll(/\s+/g,' ')] || text;if(lang==='ja'||lang==='ko')return text;return ipaToSpelling(text,lang);}
   function voiceFor(code){
     const target=LANGS[code].lang.toLowerCase();
     const all=speechSynthesis.getVoices();
-    const allowed=$('allowOtherVoices').checked ? all : all.filter(v=>v.localService===true);
+    const allowed=all.filter(v=>v.localService===true);
     const exact=allowed.filter(v=>v.lang.toLowerCase().replace('_','-')===target);
     const sameLanguage=allowed.filter(v=>v.lang.toLowerCase().split(/[-_]/)[0]===target.split('-')[0]);
     // When optional voices are enabled, still choose an on-device voice first.
@@ -131,7 +131,7 @@
     const next=()=>{if(id!==state.speaking)return;if(index>=items.length){$('stop').disabled=true;$('play').disabled=false;setStatus('よみおわったよ！');return;}
       const item=items[index++],spoken=toSpeech(item);if(!spoken){next();return;}
       const utter=new SpeechSynthesisUtterance(spoken);utter.lang=LANGS[item.lang].lang;utter.voice=voiceFor(item.lang);utter.pitch=pitch;utter.rate=rate;
-      utter.onstart=()=>{if(id!==state.speaking)return;setStatus('よんでいるよ…');if(!started&&keep){started=true;state.history.unshift({items:items.map(x=>({...x})),at:Date.now()});state.history=state.history.slice(0,60);saveHistory();renderHistory();}};
+      utter.onstart=()=>{if(id!==state.speaking)return;setStatus('よんでいるよ…');if(false&&keep){started=true;state.history.unshift({items:items.map(x=>({...x})),at:Date.now()});state.history=state.history.slice(0,60);saveHistory();renderHistory();}};
       utter.onend=()=>{if(id===state.speaking)next();};utter.onerror=()=>{if(id!==state.speaking)return;stop();setStatus('こえを だせなかったよ。たんまつの おんせい せっていを みてね。');};
       speechSynthesis.speak(utter);
     };next();
@@ -144,6 +144,8 @@
   $('clearHistory').addEventListener('click',()=>{if(!confirm('きろくを ぜんぶ けす？'))return;state.history=[];saveHistory();renderHistory();setStatus('きろくを けしたよ。');});
   function updateSliders() {const pitch=Number($('pitch').value),rate=Number($('rate').value);$('pitchValue').textContent=pitch===1?'ふつう':pitch<1?'ひくめ':'たかめ';$('rateValue').textContent=rate===1?'ふつう':rate<1?'ゆっくり':'はやめ';}
   $('pitch').addEventListener('input',updateSliders);$('rate').addEventListener('input',updateSliders);
+  window.importTrip=text=>{if(typeof text!=='string'||text.length>2000)return;stop();switchMode(false);$('language').value='ja';state.single=Array.from(text,text=>({text,lang:'ja',raw:true}));renderInput();renderPad();renderExamples();};
   renderPad();renderInput();renderExamples();renderHistory();updateSliders();
-  if("speechSynthesis" in window)speechSynthesis.getVoices();
+  if('speechSynthesis'in window){speechSynthesis.getVoices();speechSynthesis.addEventListener('voiceschanged',()=>setStatus('こえの じゅんびが できたよ。'));}
+
 })();

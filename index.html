@@ -1,35 +1,13 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#176ed4">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; img-src 'self'; media-src 'none'; font-src 'none'; frame-src 'none'; object-src 'none'; form-action 'none'; base-uri 'none'">
-  <meta name="referrer" content="no-referrer">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" href="./icons/icon-192.png">
-  <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="description" content="発音記号やピンイン、かな、ハングルで音をつくって聞ける、子ども向けの発音あそび。">
-  <title>いっちゃんの おとの じっけんしつ</title>
-  <link rel="stylesheet" href="./style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f7ff"><meta name="description" content="ことばをいろいろな言語に旅させる逆翻訳ゲーム"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><title>ことばの世界旅行</title>
 </head>
-<body>
-  <main class="shell">
-    <header class="mast"><span class="logo" aria-hidden="true">♫</span><div><h1>おとの じっけんしつ</h1><p>きごうを おして、こえを つくろう！</p></div></header>
-    <section class="card work" aria-label="発音をつくる">
-      <div class="mode-switch" role="group" aria-label="読み方のモード"><button id="singleMode" class="mode active" type="button" aria-pressed="true">ひとつの ことば</button><button id="mixMode" class="mode" type="button" aria-pressed="false">ことばを まぜる</button></div>
-      <div class="editor"><div id="single"><label for="language">ことばを えらぶ</label><select id="language"></select></div><p id="mixHint" hidden>いろいろな キーを、すきな じゅんに おしてね。</p><p id="inputLabel">ここに きごうが ならぶよ</p><div id="symbols" class="symbol-display" role="region" aria-labelledby="inputLabel" aria-live="polite"></div><div id="examples" class="examples"></div></div>
-      <div class="keyboard"><div class="keyboard-heading"><strong id="keyboardTitle">はつおん きごう</strong><span>タップで いれられるよ</span></div><div id="keyGroups"></div><div class="keyboard-actions"><button id="spaceKey" type="button">スペース</button><button id="backspaceKey" type="button">⌫ ひとつ けす</button><button id="clearKey" type="button">ぜんぶ けす</button></div></div>
-      <div class="controls"><div class="control"><label for="pitch">こえの たかさ <output id="pitchValue">ふつう</output></label><input id="pitch" type="range" min="0.7" max="1.7" step="0.1" value="1"></div><div class="control"><label for="rate">よむ はやさ <output id="rateValue">ふつう</output></label><input id="rate" type="range" min="0.65" max="1.35" step="0.05" value="1"></div></div>
-      <div class="playrow"><button id="play" class="play" type="button">▶ こえを きく</button><button id="stop" class="stop" type="button" disabled>■ とめる</button></div>
-      <p id="status" class="status" role="status" aria-live="polite">すきな きごうを おしてみよう！</p>
-    </section>
-    <section class="card history" aria-labelledby="historyTitle"><div class="section-heading"><h2 id="historyTitle">もういちど きく</h2><button id="clearHistory" class="text-button" type="button">きろくを けす</button></div><div id="historyList" class="history-list"></div></section>
-    <details class="about"><summary>インストール</summary><button id="installApp" type="button" hidden>ホームがめんに いれる</button><p id="installHelp">Android：Chrome の「︙」→「ホーム画面に追加」→「インストール」。iPhone：Safari の共有 →「ホーム画面に追加」。GitHub Pages の公開URLから開いてください。</p><p id="offlineStatus" role="status"></p></details>
-    <details class="about"><summary>おとなのかたへ：読み方と安全性</summary><p>IPA（国際音声記号）は多くの言語の音を表す共通の記号です。ピンインは中国語の発音表記、かなは日本語の表記です。韓国語は子音と母音、必要に応じてパッチムを組み合わせて一文字を作り、韓国語の音声で読みます。IPAは選択言語の綴りにおおまかに変換します。発音や声調の厳密な再現は保証できません。</p><p>初期設定では、ブラウザが「端末内で処理する」と申告した音声だけを自動選択します。該当する声がなければ再生しません。アプリの読み込み・更新時は公開元と通信します。入力をサーバーに送る処理はありません。GitHub Pagesではアクセス時のIPアドレスが記録されます。履歴はこのブラウザ内にだけ保存します。ブラウザや端末の内部動作までは、このアプリだけでは検証できません。</p><label class="voice-option"><input id="allowOtherVoices" type="checkbox"> 端末内の声がないとき、ほかの声も使う</label><p class="warning">これをオンにすると、端末や音声サービスによっては入力した文字が外部に送られる可能性があります。設定は保存されません。</p></details>
-  </main>
-  <script src="./app.js" defer></script>
-  <script src="./pwa.js" defer></script>
-</body>
-</html>
+<body><main class="app">
+<header><div class="brand">🌍 ことばの世界旅行</div><p class="tagline">ことばを世界へ旅させてみよう！</p></header><nav><button id="tripTab">🌍 言葉の世界旅行</button><button id="labTab">🔊 おとのじっけんしつ</button></nav><div id="tripArea">
+<section class="card"><label for="source">もとの日本語</label><textarea id="source" maxlength="500" placeholder="ここに日本語を書いてね" rows="4"></textarea><p class="privacy">なまえ・住所・電話番号など、大事な情報は入れないでね</p><div class="counter"><span id="count">0</span> / 500</div>
+<label for="level">逆翻訳レベル</label><select id="level"><option value="3">ちょい壊れ（3言語）</option><option value="5" selected>かなり壊れ（5言語）</option><option value="8">意味不明（8言語）</option><option value="12">カオス（12言語）</option></select>
+<button id="go" class="primary">逆翻訳する！</button><div id="status" class="status" aria-live="polite"></div></section>
+<section id="resultCard" class="card result-card" hidden><label>逆翻訳した日本語</label><div id="result" class="result">ここに戻ってきた言葉が出るよ</div><button id="soundToggle" class="secondary" hidden aria-expanded="false">🔊 音で遊ぶ！</button><section id="soundArea" hidden><div id="voicePanel"></div><button id="sendLab" class="secondary">🔬 おとのじっけんしつで遊ぶ</button></section><button id="again" class="secondary">もう一回</button><div class="route"><strong>今回の言葉の旅</strong><div id="route"></div></div><details><summary>途中も見る</summary><ol id="steps"></ol></details></section>
+<footer>翻訳にはインターネット接続が必要です。<span id="offline" hidden>インターネットにつながったら遊べるよ。</span></footer>
+</div><section id="labArea" hidden><button id="backTrip">🌍 世界旅行へもどる</button><iframe id="labFrame" title="おとのじっけんしつ"></iframe></section></main><script src="config.js"></script><script src="speech.js"></script><script src="sound-ui.js" defer></script><script src="app.js" defer></script></body></html>
